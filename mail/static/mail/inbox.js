@@ -45,10 +45,39 @@ function compose_email() {
 
 function load_mailbox(mailbox) {
 
+
+  fetch('/emails/' + mailbox)
+    .then(response => response.json())
+    .then(emails => {
+      // Print emails
+
+      let text = ''
+      for (let i = 0; i < emails.length; i++) {
+        let read = emails[i].read
+        text +=
+          `<div  class="email-row ${read}">
+            <div onclick="show_email(${emails[i].id})" class="email-content">
+              <b>${emails[i].sender}</b>   
+              <p>${emails[i].subject}</p>
+              <span>${emails[i].timestamp}</span>
+            </div>
+          </div>`
+      }
+      document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`
+      document.querySelector('#emails-view').innerHTML += text;
+    });
+
+  // Show the mailbox and hide other views
+  if (document.querySelector('#email-data') !== null) {
+    document.querySelector('#email-data').style.display = 'none';
+  }
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#emails-view').style.display = 'block';
+
+
+
+
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
-
-  // Show the mailbox name
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 }
