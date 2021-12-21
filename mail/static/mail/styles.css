@@ -13,13 +13,21 @@ span {
     margin-top: 5px;
     margin-right: 60px;
 }
-
 .email-row p, b {
     display: inline-block;
     margin: 5px;
     color: black;
 }
-
 .true {
     background: #F3F3F3;
+}
+.archive {
+    margin-top: -33px;
+    margin-right: 5px;
+    float: right;
+    display: inline;
+    background: #F3F3F3;
+    width: 35px;
+    height: 35px;
+    border: none;
 }
