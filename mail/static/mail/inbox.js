@@ -34,6 +34,49 @@ function archive_email(element) {
   load_mailbox('inbox');
 }
 
+function send_email() {
+  let recipients_data = document.querySelector('#compose-recipients').value;
+  let subject_data = document.querySelector('#compose-subject').value;
+  let body_data = document.querySelector('#compose-body').value;
+
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+      recipients: recipients_data,
+      subject: subject_data,
+      body: body_data
+    })
+  });
+
+  load_mailbox('sent')
+}
+
+
+function reply(element) {
+  console.log(element)
+  fetch('/emails/' + element)
+    .then(response => response.json())
+    .then(email => {
+
+      console.log(email)
+      // Show compose view and hide other views
+      document.querySelector('#emails-view').style.display = 'none';
+      if (document.querySelector('#email-data') !== null) {
+        document.querySelector('#email-data').style.display = 'none';
+      }
+      document.querySelector('#compose-view').style.display = 'block';
+
+      document.querySelector('#compose-recipients').value = email.sender;
+      if (email.subject.includes('Re:')) {
+        document.querySelector('#compose-subject').value = email.subject;
+      } else {
+        document.querySelector('#compose-subject').value = 'Re: ' + email.subject;
+      }
+      document.querySelector('#compose-body').value = 'On ' + email.timestamp +
+        ' ' + email.sender + ' wrote: ' + email.body;
+    })
+}
+
 function show_email(element) {
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'none';
@@ -54,7 +97,7 @@ function show_email(element) {
                    <h6><b>To: </b>${email.recipients}</h6>
                    <h6><b>Subject: </b>${email.subject}</h6>
                    <h6><b>Timestamp: </b>${email.timestamp}</h6>
-                   <input type="button" class="btn btn-sm btn-outline-primary" value="Reply">
+                   <input type="button" onclick="reply(${element})" class="btn btn-sm btn-outline-primary" value="Reply">
                    <hr>
                    <p>${email.body}</p>`
 
@@ -70,27 +113,13 @@ function show_email(element) {
 
 }
 
-function send_email() {
-  let recipients_data = document.querySelector('#compose-recipients').value;
-  let subject_data = document.querySelector('#compose-subject').value;
-  let body_data = document.querySelector('#compose-body').value;
-
-  fetch('/emails', {
-    method: 'POST',
-    body: JSON.stringify({
-      recipients: recipients_data,
-      subject: subject_data,
-      body: body_data
-    })
-  });
-
-  load_mailbox('sent')
-}
-
 function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+  if (document.querySelector('#email-data') !== null) {
+    document.querySelector('#email-data').style.display = 'none';
+  }
   document.querySelector('#compose-view').style.display = 'block';
 
   // Clear out composition fields
