@@ -2,17 +2,54 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>{% block title %}Mail{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link rel="stylesheet" href="{% static 'mail/styles.css' %}">
-        {% block script %}
-        {% endblock %}
-    </head>
-    <body>
-        <div class="container">
-            {% block body %}
-            {% endblock %}
-        </div>
-    </body>
+<head>
+    <title>{% block title %}Mail{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'mail/styles.css' %}">
+    {% block script %}
+    {% endblock %}
+    <style>
+        .email-row {
+            display: block;
+            border: 1px solid black;
+            width: auto;
+            height: 40px;
+        }
+
+        span {
+            float: right;
+            display: inline-block;
+            margin-top: 5px;
+            margin-right: 60px;
+        }
+
+        .email-row p, b {
+            display: inline-block;
+            margin: 5px;
+            color: black;
+        }
+
+        .true {
+            background: #F3F3F3;
+        }
+
+        .archive {
+            margin-top: -33px;
+            margin-right: 5px;
+            float: right;
+            display: inline;
+            background: #F3F3F3;
+            width: 35px;
+            height: 35px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    {% block body %}
+    {% endblock %}
+</div>
+</body>
 </html>
