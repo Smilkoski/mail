@@ -14,6 +14,42 @@ document.addEventListener('DOMContentLoaded', function () {
   return false
 });
 
+function show_email(element) {
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+
+  fetch('/emails/' + element)
+    .then(response => response.json())
+    .then(email => {
+      let e
+      if (document.querySelector('#email-data') === null) {
+        e = document.createElement('div')
+        e.id = 'email-data';
+      } else {
+        e = document.querySelector('#email-data')
+        e.style.display = 'block'
+      }
+
+      e.innerHTML = `<h6><b>From: </b>${email.sender}</h6>
+                   <h6><b>To: </b>${email.recipients}</h6>
+                   <h6><b>Subject: </b>${email.subject}</h6>
+                   <h6><b>Timestamp: </b>${email.timestamp}</h6>
+                   <input type="button" class="btn btn-sm btn-outline-primary" value="Reply">
+                   <hr>
+                   <p>${email.body}</p>`
+
+      document.querySelector('.container').append(e);
+    })
+
+  fetch('/emails/' + element, {
+    method: 'PUT',
+    body: JSON.stringify({
+      read: true
+    })
+  })
+
+}
+
 function send_email() {
   let recipients_data = document.querySelector('#compose-recipients').value;
   let subject_data = document.querySelector('#compose-subject').value;
